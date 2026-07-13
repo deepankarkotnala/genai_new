@@ -104,6 +104,15 @@
     },
 
 
+    /* COMPLETE_INTERVIEW_HUB_START */
+    {
+      id: "completeinterview", label: "Complete Interview Hub", mark: "Q", blurb: "55-page synchronized interview site", home: "genai-portal/interview-hub/index.html",
+      pages: [
+        { path: "genai-portal/interview-hub/index.html", title: "Complete interview hub", num: "✦", kw: "complete genai interview hub 173 questions answers mocks projects system design role roadmap 30 60 90 rag agents evaluation llmops guardrails python behavioral" }
+      ]
+    },
+    /* COMPLETE_INTERVIEW_HUB_END */
+
     /* INTERVIEW_PREP_START */
     {
       id: "interviewprep", label: "GenAI Interview Prep", mark: "I", blurb: "India-focused question bank", home: "genai-portal/interview-prep/index.html",
