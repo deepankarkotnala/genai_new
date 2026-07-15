@@ -71,7 +71,7 @@
         <h1>LangGraph</h1>
         <p class="lead">LCEL chains (Module 10) are acyclic — they flow one way, start to finish. But real agents (Module 08) <em>loop</em>: reason, act, observe, and come back. They branch, run steps in parallel, pause for human approval, and need to remember where they were if they crash. <strong>LangGraph</strong> models your agent as a <strong>state machine</strong> — a graph of nodes and edges over shared state — giving you the control, durability, and human-in-the-loop that production agents demand.</p>
         <div class="meta-row">
-          <span class="pill blue">⏱ ~65 min read</span>
+          <span class="pill blue">⏱ ~70 min + 2 focused labs</span>
           <span class="pill">Difficulty · Advanced</span>
           <span class="pill purple">Prereq · Modules 08, 10</span>
         </div>
@@ -226,6 +226,12 @@
 
         <!-- ============ 6. PYTHON ============ -->
         <h2 id="python">6 · Practical Python</h2>
+        <p>Before treating the graph as production-ready, strengthen the two Python foundations most often exposed in backend and agent interviews:</p>
+        <div class="grid grid-2">
+          <a class="card" href="../langgraph-asyncio.html" style="text-decoration:none;color:inherit"><span class="ico">⚡</span><h4>AsyncIO for LangGraph</h4><p>Event loop, coroutines, TaskGroup, timeouts, cancellation, backpressure, async nodes, <code>ainvoke</code>, <code>astream</code>, debugging, and coding drills.</p><p style="margin-bottom:0"><strong>Open interview lab →</strong></p></a>
+          <a class="card" href="../langgraph-pydantic.html" style="text-decoration:none;color:inherit"><span class="ico">🧩</span><h4>Pydantic for LangGraph</h4><p>Pydantic v2 models, strict contracts, validators, discriminated tool schemas, graph-state trade-offs, documented limitations, and design questions.</p><p style="margin-bottom:0"><strong>Open interview lab →</strong></p></a>
+        </div>
+        <div class="callout note"><div class="c-ico">📌</div><div class="c-body"><div class="c-title">Recommended order for your preparation</div><p>Complete <strong>Pydantic first</strong> if request/tool schemas feel unfamiliar. Complete <strong>AsyncIO next</strong>, then return to the production graph examples below and rewrite one sync node as a bounded, cancellation-safe async node.</p></div></div>
 
         <h3>Minimal — state, nodes, a conditional edge</h3>
         <div class="code-block">

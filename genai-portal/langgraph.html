@@ -84,7 +84,7 @@
         <h1>LangGraph &amp; Its Components</h1>
         <p class="lead"><strong>LangGraph</strong> is a library for building <em>stateful, multi-step</em> LLM applications as a <strong>graph</strong>: you define the steps (nodes), how control flows between them (edges), and a shared state object that every step reads and writes. Where a plain chain runs start-to-finish once, a LangGraph app can loop, branch, pause for a human, and resume — which is exactly what agents need. This page takes it apart one component at a time.</p>
         <div class="meta-row">
-          <span class="pill blue">⏱ ~30 min read</span>
+          <span class="pill blue">⏱ ~30 min + interview labs</span>
           <span class="pill">Basics → intermediate</span>
           <span class="pill purple">Python · LangGraph · OpenAI</span>
         </div>
@@ -120,8 +120,14 @@
           <div class="comp"><h4>Checkpointer</h4><div class="role">Persistence — saves state per step so a graph can pause, resume, and remember across sessions.</div></div>
           <div class="comp"><h4>ToolNode</h4><div class="role">A ready-made node that runs whatever tool the LLM asked for.</div></div>
           <div class="comp"><h4>Human-in-the-loop</h4><div class="role"><code>interrupt</code> — pause the graph for human input/approval, then continue.</div></div>
+          <div class="comp"><h4>Async execution</h4><div class="role">Async nodes, <code>ainvoke</code>/<code>astream</code>, cancellation, timeouts, and bounded I/O concurrency.</div></div>
+          <div class="comp"><h4>Runtime schemas</h4><div class="role">Pydantic models for request/tool validation and optional graph-state schemas.</div></div>
         </div>
-        <p>We'll build them up in order; by the end they assemble into a small working agent (§10).</p>
+        <p>We'll build the graph components in order; by the end they assemble into a small working agent (§10).</p>
+        <div class="grid grid-2">
+          <a class="card" href="langgraph-asyncio.html" style="text-decoration:none;color:inherit"><h4>⚡ AsyncIO interview lab</h4><p>Master the event loop, TaskGroup, cancellation, timeouts, backpressure, async LangGraph nodes, and streaming.</p><p style="margin-bottom:0"><strong>Study AsyncIO →</strong></p></a>
+          <a class="card" href="langgraph-pydantic.html" style="text-decoration:none;color:inherit"><h4>🧩 Pydantic interview lab</h4><p>Master strict schemas, validators, tool contracts, Pydantic state trade-offs, and LangGraph-specific limitations.</p><p style="margin-bottom:0"><strong>Study Pydantic →</strong></p></a>
+        </div>
 
         <!-- 3 -->
         <h2 id="state">3 · State — the shared object</h2>

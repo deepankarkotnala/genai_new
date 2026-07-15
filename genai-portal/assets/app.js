@@ -32,7 +32,7 @@
     { id: "11", file: "11_llamaindex.html", title: "LlamaIndex", track: "Frameworks",
       kw: "llamaindex index node document query engine" },
     { id: "12", file: "12_langgraph.html", title: "LangGraph", track: "Frameworks",
-      kw: "langgraph state node edge conditional routing parallel human in the loop" },
+      kw: "langgraph state node edge conditional routing parallel human in the loop asyncio pydantic ainvoke astream taskgroup validation" },
     { id: "13", file: "13_multi_agents.html", title: "Multi-Agent Systems", track: "Agents",
       kw: "crewai multi agent orchestration supervisor handoff" },
     { id: "14", file: "14_production_genai.html", title: "Production GenAI", track: "Production",

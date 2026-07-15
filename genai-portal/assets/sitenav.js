@@ -45,7 +45,9 @@
         // Frameworks
         { path: "genai-portal/modules/10_langchain.html", title: "LangChain", num: "10", track: "Frameworks", kw: "langchain lcel chains runnable retriever memory" },
         { path: "genai-portal/modules/11_llamaindex.html", title: "LlamaIndex", num: "11", track: "Frameworks", kw: "llamaindex index node document query engine" },
-        { path: "genai-portal/modules/12_langgraph.html", title: "LangGraph", num: "12", track: "Frameworks", kw: "langgraph state node edge conditional routing parallel human in the loop" },
+        { path: "genai-portal/modules/12_langgraph.html", title: "LangGraph", num: "12", track: "Frameworks", kw: "langgraph state node edge conditional routing parallel human in the loop asyncio pydantic" },
+        { path: "genai-portal/langgraph-asyncio.html", title: "AsyncIO for LangGraph", num: "12A", track: "Frameworks", kw: "python asyncio event loop coroutine task taskgroup gather cancellation timeout semaphore backpressure ainvoke astream async node interview" },
+        { path: "genai-portal/langgraph-pydantic.html", title: "Pydantic for LangGraph", num: "12B", track: "Frameworks", kw: "pydantic v2 basemodel field validator model validator configdict strict schema discriminated union langgraph state interview" },
         // Production
         { path: "genai-portal/modules/14_production_genai.html", title: "Production GenAI", num: "14", track: "Production", kw: "observability tracing cost guardrails rate limiting evaluation testing security" },
         { path: "genai-portal/modules/15_capstone_projects.html", title: "Capstone Projects", num: "15", track: "Production", kw: "capstone project pdf rag sql agent elasticsearch mcp multi-agent enterprise" }
@@ -104,6 +106,35 @@
     },
 
 
+    {
+      id: "googleprep",
+      label: "Google Preparation",
+      mark: "G",
+      blurb: "Python SDE & ML systems",
+      home: "genai-portal/google-prep/index.html",
+      pages: [
+        { path: "genai-portal/google-prep/index.html", title: "Personal command center", num: "✦", kw: "google interview preparation python backend sde dsa system design behavioural management coding resume mock india" }
+      ]
+    },
+
+
+    {
+      id: "focusedlabs",
+      label: "Focused Interview Labs",
+      mark: "F",
+      blurb: "Python backend and GenAI",
+      home: "genai-portal/interview-labs/index.html",
+      pages: [
+        { path: "genai-portal/interview-labs/index.html", title: "Labs overview", num: "✦", kw: "focused interview labs python backend fastapi websocket langchain rag mcp overview" },
+        { path: "genai-portal/interview-labs/python-sync-async-interview.html", title: "Sync vs Async Python", num: "P1", track: "Python Backend", kw: "python synchronous asynchronous asyncio event loop coroutine task thread process gil timeout cancellation backpressure interview" },
+        { path: "genai-portal/interview-labs/fastapi-interview.html", title: "FastAPI", num: "P2", track: "Python Backend", kw: "fastapi asgi starlette pydantic dependency injection request lifecycle def async def testing security deployment interview" },
+        { path: "genai-portal/interview-labs/websockets-interview.html", title: "WebSockets", num: "P3", track: "Python Backend", kw: "websocket web socket handshake frames fastapi real time heartbeat reconnect backpressure broker scaling interview" },
+        { path: "genai-portal/interview-labs/langchain-interview.html", title: "LangChain", num: "G1", track: "GenAI", kw: "langchain create agent tools middleware runtime runnable lcel structured output streaming testing interview" },
+        { path: "genai-portal/interview-labs/rag-interview.html", title: "RAG", num: "G2", track: "GenAI", kw: "rag retrieval chunking hybrid reranking evaluation security debugging system design interview" },
+        { path: "genai-portal/interview-labs/mcp-interview.html", title: "MCP", num: "G3", track: "GenAI", kw: "mcp model context protocol host client server tools resources prompts transport security interview" }
+      ]
+    },
+
     /* COMPLETE_INTERVIEW_HUB_START */
     {
       id: "completeinterview", label: "Complete Interview Hub", mark: "Q", blurb: "55-page synchronized interview site", home: "genai-portal/interview-hub/index.html",
@@ -155,7 +186,7 @@
         { path: "genai-portal/langfuse.html", title: "Langfuse — Observability", num: "📡", kw: "langfuse observability trace cost latency quality scores" },
         { path: "genai-portal/guardrails.html", title: "Guardrails", num: "🛡️", kw: "guardrails safety scope pii hallucination policy" },
         { path: "genai-portal/memory.html", title: "Memory in LLMs", num: "🧠", kw: "memory context window stateless chat history" },
-        { path: "genai-portal/langgraph.html", title: "LangGraph & components", num: "🕸️", kw: "langgraph state node edge checkpointer human in the loop" },
+        { path: "genai-portal/langgraph.html", title: "LangGraph & components", num: "🕸️", kw: "langgraph state node edge checkpointer human in the loop asyncio pydantic" },
         { path: "genai-portal/claude-agent.html", title: "How a Claude Agent Works", num: "🤖", kw: "claude agent sdk tool runner loop context safety" },
         { path: "genai-portal/hermes.html", title: "Hermes — open local models", num: "🔱", kw: "hermes nous ollama open function calling local models" }
       ]
