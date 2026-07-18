@@ -1623,22 +1623,76 @@ body.reader-narrow { --content-max: 760px; --reading-line: 62ch; }
 body.reader-high-contrast { --text-secondary: #393746; --text-muted: #6d6a79; }
 [data-theme="dark"] body.reader-high-contrast { --text-secondary: #dedbe8; --text-muted: #b3afbf; }
 
-body.focus-mode .app { grid-template-columns: minmax(0, 1fr); }
-body.focus-mode .sidebar { display: none !important; }
-body.focus-mode .content-wrap { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
-body.focus-mode .content { max-width: 760px; margin-inline: auto; }
-body.focus-mode .toc-rail { display: none; }
-body.focus-mode .topbar {
-  width: min(760px, calc(100% - 24px));
-  margin-inline: auto;
-  justify-content: flex-end;
-  background: color-mix(in srgb, var(--glass) 84%, transparent);
+body.focus-mode {
+  --content-max: 1220px;
+  --reading-line: 94ch;
+  --reader-content-width: 1220px;
+  --reader-line-length: 94ch;
 }
-body.focus-mode .topbar .menu-btn,
-body.focus-mode .topbar .crumbs,
-body.focus-mode .topbar .home-btn { display: none !important; }
+body.focus-mode .app { grid-template-columns: minmax(0, 1fr); }
+body.focus-mode .main { width: 100%; min-width: 0; }
+body.focus-mode .sidebar,
+body.focus-mode .sidebar-resizer,
+body.focus-mode .backdrop,
+body.focus-mode .toc-rail,
+body.focus-mode .toc,
+body.focus-mode .reading-progress,
+body.focus-mode .scroll-top,
+body.focus-mode .site-footer { display: none !important; }
+body.focus-mode .content-wrap {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(22px, 5vw, 86px);
+}
+body.focus-mode .content {
+  width: 100%;
+  max-width: min(100%, var(--reader-content-width));
+  margin-inline: auto;
+  padding-top: clamp(28px, 4vw, 54px);
+}
+/* Focus mode keeps only a small, unobtrusive exit control instead of the
+   full navigation bar. The lesson remains the clear visual center. */
+body.focus-mode .topbar {
+  position: fixed;
+  inset: 12px 14px auto auto;
+  z-index: 90;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+}
+body.focus-mode .topbar > *:not(.focus-btn) { display: none !important; }
+body.focus-mode .topbar .focus-btn {
+  display: inline-flex !important;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  gap: 6px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  pointer-events: auto;
+  opacity: .82;
+  box-shadow: 0 8px 24px rgba(36, 27, 78, .12), inset 0 1px 0 var(--glass-line);
+}
+body.focus-mode .topbar .focus-btn:hover,
+body.focus-mode .topbar .focus-btn:focus-visible { opacity: 1; }
+body.focus-mode .topbar .focus-btn svg { width: 14px; height: 14px; }
 body.focus-mode .hero { padding: clamp(28px, 4vw, 44px); }
-body.focus-mode .site-footer { opacity: .46; }
+
+@media (max-width: 680px) {
+  body.focus-mode .content-wrap { padding-inline: clamp(15px, 5vw, 24px); }
+  body.focus-mode .topbar { inset: 9px 9px auto auto; }
+  body.focus-mode .topbar .focus-btn { width: 34px; padding: 0; }
+  body.focus-mode .topbar .focus-lbl { display: none; }
+}
 
 /* ---- Responsive system ---- */
 @media (max-width: 1180px) {
@@ -2855,8 +2909,7 @@ html[data-theme="dark"] .diagram { box-shadow:var(--shadow-sm),inset 0 1px 0 rgb
   --mobile-sidebar-w: min(91vw, 344px);
 }
 
-/* Reader and Focus were retired; keep a defensive rule for stale cached markup. */
-.focus-btn,
+/* Reader controls remain retired; Focus is available on standard study pages. */
 .reader-wrap { display: none !important; }
 
 .content-wrap {

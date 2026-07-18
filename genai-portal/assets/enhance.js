@@ -83,7 +83,8 @@
 
   function addFocusButton() {
     var bar = document.querySelector(".topbar");
-    if (!bar || bar.querySelector(".focus-btn")) return;
+    var studyContent = document.querySelector(".content-wrap > .content");
+    if (!bar || !studyContent || bar.querySelector(".focus-btn")) return;
 
     var button = document.createElement("button");
     button.type = "button";
@@ -93,7 +94,14 @@
     function apply(active, persist) {
       document.body.classList.toggle("focus-mode", active);
       button.setAttribute("aria-pressed", active ? "true" : "false");
+      button.setAttribute("aria-label", active ? "Exit focus mode" : "Enter focus mode");
+      button.title = active ? "Exit focus mode (Esc)" : "Enter focus mode (F)";
       button.innerHTML = iconFocus(active) + '<span class="focus-lbl">' + (active ? "Exit focus" : "Focus") + "</span>";
+
+      if (active) {
+        var app = document.querySelector(".app");
+        if (app) app.classList.remove("nav-open");
+      }
       if (persist) setStored(FOCUS_KEY, active ? "1" : "0");
     }
 
@@ -103,6 +111,12 @@
     });
 
     document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && document.body.classList.contains("focus-mode")) {
+        event.preventDefault();
+        apply(false, true);
+        button.focus();
+        return;
+      }
       if (event.key.toLowerCase() !== "f" || event.metaKey || event.ctrlKey || event.altKey) return;
       var tag = document.activeElement && document.activeElement.tagName;
       if (/INPUT|TEXTAREA|SELECT/.test(tag || "")) return;
@@ -736,26 +750,20 @@
     new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
 
-  function retireLegacyReadingControls() {
+  function clearLegacyReadingClasses() {
     var body = document.body;
     var root = document.documentElement;
-    ["focus-mode", "reader-text-small", "reader-text-large", "reader-text-xl",
+    ["reader-text-small", "reader-text-large", "reader-text-xl",
       "reader-narrow", "reader-wide", "reader-high-contrast"].forEach(function (name) {
       body.classList.remove(name);
       root.classList.remove(name);
     });
-    delete root.dataset.readingSize;
-    delete root.dataset.readingWidth;
-    delete root.dataset.readingContrast;
-    try {
-      localStorage.removeItem(FOCUS_KEY);
-      localStorage.removeItem(READER_KEY);
-    } catch (error) {}
   }
 
   function init() {
-    retireLegacyReadingControls();
+    clearLegacyReadingClasses();
     addHomeButton();
+    addFocusButton();
     injectTopicDiagram();
     setupReadingProgress();
     setupSectionGuidance();
