@@ -95,7 +95,7 @@
 <h3>Why — emergence from scale</h3>
 <p>Why does "predict the next word" produce something that can write code or pass exams? Because to predict the next token <em>well</em> across billions of diverse examples, the network is forced to learn the underlying structure: syntax, semantics, world facts, and reasoning shortcuts. Capabilities like in-context learning and chain-of-thought <strong>emerge</strong> once the model and data are large enough — they were never explicitly programmed.</p>
 <h3>How — the generation loop</h3>
-<p>Text generation is autoregressive: the model predicts one token, appends it to the input, and repeats. The expensive forward pass through the transformer happens <em>once per token</em>.</p>
+<p>Text generation is autoregressive: the model predicts one token ID, appends it to the sequence, and repeats. After the initial full-prompt <strong>prefill</strong>, production inference normally performs one cached decode step per generated token rather than re-tokenizing the growing text or recomputing the entire sequence.</p>
 <div class="cssflow">
 <div class="fnode accent">Your prompt (text)<small>"Explain RAG in one line"</small></div>
 <div class="farrow"></div>
@@ -105,62 +105,77 @@
 <div class="farrow"></div>
 <div class="fnode">Sampling (temperature, top-p)<small>pick the next token</small></div>
 <div class="farrow"></div>
-<div class="fnode">Append token → loop until stop<small>repeat per token</small></div>
+<div class="fnode">Append token ID → cached decode<small>repeat until stop</small></div>
 <div class="farrow"></div>
 <div class="fnode accent">Detokenize → answer</div>
 </div>
 <div class="callout note">
 <div class="c-ico">📐</div>
 <div class="c-body"><div class="c-title">Feynman check</div>
-<p>If you can't explain to a colleague why generating a 500-token answer costs roughly 500 forward passes (and why that makes long outputs slow and expensive), re-read the loop above before moving on.</p></div>
+<p>If you can't explain to a colleague why a 500-token answer usually requires roughly 500 cached decode steps—and why long outputs remain slow and expensive—re-read the loop above before moving on.</p></div>
 </div>
 <!-- ============ 3. VISUAL ARCHITECTURE ============ -->
 <h2 id="architecture">3 · Visual architecture</h2>
-<p>Here is the full inference pipeline as a single animated diagram. The dashed arrow is the autoregressive feedback loop — the heart of generation.</p>
+<p>Here is the inference pipeline. The prompt is tokenized once during the <strong>prefill</strong> phase. During cached decoding, the dashed loop feeds the newly sampled token ID back to the model input while the transformer reuses its KV cache.</p>
 <div class="diagram">
-<svg aria-label="LLM inference pipeline" role="img" viewbox="0 0 760 300" width="760">
+<svg aria-label="LLM inference pipeline showing token ID feedback and KV caching" role="img" viewbox="0 0 760 350" width="760">
 <defs>
 <marker id="arrow" markerheight="10" markerunits="strokeWidth" markerwidth="10" orient="auto" refx="8" refy="3">
 <path d="M0,0 L8,3 L0,6 Z" fill="var(--text-muted)"></path>
 </marker>
 </defs>
-<!-- nodes -->
+<!-- main inference path -->
 <g>
-<rect class="flow-node-accent" height="60" rx="10" width="120" x="20" y="120"></rect>
-<text class="flow-label" text-anchor="middle" x="80" y="146">Prompt</text>
-<text class="flow-sub" text-anchor="middle" x="80" y="164">raw text</text>
+<rect class="flow-node-accent" height="60" rx="10" width="110" x="15" y="120"></rect>
+<text class="flow-label" text-anchor="middle" x="70" y="146">Prompt</text>
+<text class="flow-sub" text-anchor="middle" x="70" y="164">raw text</text>
 </g>
 <g>
-<rect class="flow-node" height="60" rx="10" width="120" x="180" y="120"></rect>
-<text class="flow-label" text-anchor="middle" x="240" y="146">Tokenizer</text>
-<text class="flow-sub" text-anchor="middle" x="240" y="164">→ token IDs</text>
+<rect class="flow-node" height="60" rx="10" width="115" x="155" y="120"></rect>
+<text class="flow-label" text-anchor="middle" x="212" y="146">Tokenizer</text>
+<text class="flow-sub" text-anchor="middle" x="212" y="164">once at input</text>
 </g>
 <g>
-<rect class="flow-node" height="100" rx="10" width="150" x="340" y="100"></rect>
-<text class="flow-label" text-anchor="middle" x="415" y="140">Transformer</text>
-<text class="flow-sub" text-anchor="middle" x="415" y="158">N decoder layers</text>
-<text class="flow-sub" text-anchor="middle" x="415" y="174">→ logits</text>
+<rect class="flow-node" height="100" rx="10" width="165" x="305" y="100"></rect>
+<text class="flow-label" text-anchor="middle" x="387" y="133">Transformer</text>
+<text class="flow-sub" text-anchor="middle" x="387" y="153">embed token IDs</text>
+<text class="flow-sub" text-anchor="middle" x="387" y="171">decoder layers → logits</text>
 </g>
 <g>
-<rect class="flow-node" height="60" rx="10" width="120" x="530" y="120"></rect>
-<text class="flow-label" text-anchor="middle" x="590" y="146">Sampling</text>
-<text class="flow-sub" text-anchor="middle" x="590" y="164">temp · top-p</text>
+<rect class="flow-node" height="60" rx="10" width="115" x="505" y="120"></rect>
+<text class="flow-label" text-anchor="middle" x="562" y="146">Sampling</text>
+<text class="flow-sub" text-anchor="middle" x="562" y="164">temp · top-p</text>
 </g>
 <g>
-<rect class="flow-node-accent" height="60" rx="10" width="80" x="660" y="120"></rect>
-<text class="flow-label" text-anchor="middle" x="700" y="146">Token</text>
-<text class="flow-sub" text-anchor="middle" x="700" y="164">output</text>
+<rect class="flow-node-accent" height="60" rx="10" width="100" x="650" y="120"></rect>
+<text class="flow-label" text-anchor="middle" x="700" y="146">Token ID</text>
+<text class="flow-sub" text-anchor="middle" x="700" y="164">next integer</text>
 </g>
-<!-- arrows -->
-<path class="flow-arrow" d="M140,150 L178,150"></path>
-<path class="flow-arrow" d="M300,150 L338,150"></path>
-<path class="flow-arrow" d="M490,150 L528,150"></path>
-<path class="flow-arrow" d="M650,150 L658,150"></path>
-<!-- feedback loop -->
-<path class="flow-arrow flow-dash" d="M700,120 C700,40 240,40 240,118"></path>
-<text class="flow-sub" text-anchor="middle" x="470" y="32">autoregressive feedback — append token, predict again</text>
+<!-- main arrows -->
+<path class="flow-arrow" d="M125,150 L153,150"></path>
+<path class="flow-arrow" d="M270,150 L303,150"></path>
+<path class="flow-arrow" d="M470,150 L503,150"></path>
+<path class="flow-arrow" d="M620,150 L648,150"></path>
+<!-- cached token-ID feedback loop -->
+<path class="flow-arrow flow-dash" d="M700,120 C700,35 387,35 387,98"></path>
+<text class="flow-sub" text-anchor="middle" x="545" y="27">decode loop — append token ID directly; do not re-tokenize</text>
+<!-- KV cache -->
+<g>
+<rect class="flow-node" height="62" rx="10" width="180" x="297" y="245"></rect>
+<text class="flow-label" text-anchor="middle" x="387" y="270">KV cache</text>
+<text class="flow-sub" text-anchor="middle" x="387" y="289">reuse prior attention K/V</text>
+</g>
+<path class="flow-arrow flow-dash" d="M367,200 L367,243"></path>
+<path class="flow-arrow flow-dash" d="M407,243 L407,202"></path>
+<text class="flow-sub" text-anchor="middle" x="478" y="227">read + update each step</text>
 </svg>
-<div class="diagram-caption">Figure 1 · One forward pass produces one token. The dashed loop repeats until a stop condition.</div>
+<div class="diagram-caption">Figure 1 · Prefill processes the prompt. Cached decoding then processes the newly appended token ID and reuses prior attention keys and values until a stop condition.</div>
+</div>
+<div class="callout tip">
+<div class="c-ico">⚡</div>
+<div class="c-body"><div class="c-title">Production optimization: tokenizer bypass and KV caching</div>
+<p>The sampler already returns a discrete <strong>token ID</strong>. A production generation loop appends that ID to the sequence state and supplies it directly to the model on the next decode step; it does not normally detokenize the token and run the growing text through the tokenizer again. The generated IDs may still be detokenized incrementally for streaming text to the user, but that output conversion sits outside the model-input feedback path.</p>
+<p>The initial prompt is handled in a <strong>prefill</strong> pass that creates attention keys and values for all prompt positions. A <strong>KV cache</strong> stores those tensors, so each ordinary decode step computes the new token's states and attends to the cached history instead of recomputing every earlier position. This reduces repeated computation, although the cache consumes memory and grows with the active sequence. Some serving methods—such as speculative decoding—may validate several proposed tokens in one step, so “one new token per loop” is the standard mental model rather than a universal implementation rule.</p></div>
 </div>
 <!-- ============ 4. DEEP TECHNICAL ============ -->
 <h2 id="deep-dive">4 · Deep technical explanation</h2>
@@ -236,14 +251,20 @@
 <g class="concept-system-node s2"><rect class="flow-node" height="76" rx="14" width="145" x="205" y="168"></rect><text class="flow-label" text-anchor="middle" x="278" y="198">Policy layer</text><text class="flow-sub" text-anchor="middle" x="278" y="221">auth · guardrails</text></g>
 <g class="concept-system-node s3"><rect class="flow-node-accent" height="100" rx="16" width="145" x="405" y="96"></rect><text class="flow-label" text-anchor="middle" x="478" y="132">Language model</text><text class="flow-sub" text-anchor="middle" x="478" y="157">generates / chooses tool</text><text class="flow-sub" text-anchor="middle" x="478" y="178">probabilistic core</text></g>
 <g class="concept-system-node s4"><rect class="flow-node" height="76" rx="14" width="130" x="605" y="54"></rect><text class="flow-label" text-anchor="middle" x="670" y="84">Tools</text><text class="flow-sub" text-anchor="middle" x="670" y="107">APIs · actions</text></g>
-<g class="concept-system-node s4"><rect class="flow-node" height="76" rx="14" width="130" x="605" y="168"></rect><text class="flow-label" text-anchor="middle" x="670" y="198">Validation</text><text class="flow-sub" text-anchor="middle" x="670" y="221">schema · evals</text></g>
+<g class="concept-system-node s4"><rect class="flow-node" height="76" rx="14" width="130" x="605" y="168"></rect><text class="flow-label" text-anchor="middle" x="670" y="198">Output validation</text><text class="flow-sub" text-anchor="middle" x="670" y="221">schema · guardrails</text></g>
 <path class="flow-arrow" d="M160 145H202" style="marker-end:url(#found-arrow-system)"></path>
 <path class="flow-arrow" d="M350 92C375 92 380 125 403 132" style="marker-end:url(#found-arrow-system)"></path>
 <path class="flow-arrow" d="M350 206C375 206 380 170 403 162" style="marker-end:url(#found-arrow-system)"></path>
 <path class="flow-arrow" d="M550 130C575 125 578 94 603 92" style="marker-end:url(#found-arrow-system)"></path>
 <path class="flow-arrow" d="M550 162C575 170 578 204 603 206" style="marker-end:url(#found-arrow-system)"></path>
 </svg>
-<div class="diagram-caption">Figure 3 · Production GenAI is a system, not only a model: context, authorization, tools, validation and evaluation determine reliability.</div>
+<div class="diagram-caption">Figure 3 · Production GenAI is a system, not only a model: context, authorization, tools and post-generation output validation determine reliability.</div>
+</div>
+<div class="callout tip">
+<div class="c-ico">🛡️</div>
+<div class="c-body"><div class="c-title">Output guardrails belong inside the validation gate</div>
+<p>The model's answer is still untrusted when generation finishes. Before it is returned, the validation gate should enforce the response contract and application policy: schema and required fields, safety or topic rules, PII and secret leakage, grounding or citation requirements, and business-specific constraints. A failed check should block, redact, repair, regenerate, or safely refuse according to the product's risk policy.</p>
+<p><strong>Keep guardrails and evaluation conceptually separate:</strong> output guardrails are synchronous release checks on a specific response; evaluation measures quality across datasets or sampled production traffic. Some evaluators can power a guardrail, but an offline score by itself does not protect the response currently being served. See <a href="../guardrails.html">LLM Guardrails →</a>.</p></div>
 </div>
 <h3>Tradeoffs &amp; limitations</h3>
 <div class="grid grid-2">
@@ -428,7 +449,7 @@ resp = local.chat.completions.<span class="tok-fn">create</span>(
 <details class="collapse"><summary><span class="pill blue">Intermediate</span>  Explain temperature, top-k, and top-p. <span class="chev">›</span></summary>
 <div class="collapse-body"><p><strong>Temperature</strong> scales logits before softmax — lower sharpens toward the top token, higher flattens for diversity. <strong>Top-k</strong> restricts sampling to the k highest-probability tokens. <strong>Top-p (nucleus)</strong> restricts to the smallest set whose cumulative probability ≥ p, adapting to model confidence. Use temperature 0 for deterministic tasks; top-p ≈ 0.9 with moderate temperature for natural generation.</p></div></details>
 <details class="collapse"><summary><span class="pill blue">Intermediate</span>  Why is generating long outputs slow and expensive? <span class="chev">›</span></summary>
-<div class="collapse-body"><p>Generation is autoregressive — one transformer forward pass per output token. Output cost grows linearly with tokens generated, and attention cost grows with total sequence length. The KV cache avoids recomputing past tokens but consumes memory proportional to context length.</p></div></details>
+<div class="collapse-body"><p>Generation is autoregressive. After a full-prompt prefill, ordinary KV-cached decoding performs roughly one model step per output token, passing the newly sampled token ID directly to the model while reusing cached attention keys and values from earlier positions. Output work still grows with generated length, and the KV cache consumes memory that grows with the active sequence.</p></div></details>
 <details class="collapse"><summary><span class="pill amber">Senior</span>  A model gives confidently wrong answers about your internal docs. Diagnose and fix. <span class="chev">›</span></summary>
 <div class="collapse-body"><p>The model has no knowledge of private data — it's hallucinating plausible text. Fix by <strong>grounding</strong>: retrieve relevant internal documents and inject them into context (RAG, Modules 6–7), instruct the model to answer only from provided context and cite sources, and add an evaluation harness to measure faithfulness. Lower temperature and add a "say 'I don't know'" instruction to reduce fabrication.</p></div></details>
 <details class="collapse"><summary><span class="pill amber">Senior</span>  How do you make LLM features testable in CI given non-determinism? <span class="chev">›</span></summary>
@@ -464,7 +485,7 @@ resp = local.chat.completions.<span class="tok-fn">create</span>(
 <!-- ============ 12. ACTIVE RECALL ============ -->
 <h2 id="recall">12 · Active recall</h2>
 <p>Answer in your head first, then reveal. Revisit these tomorrow and in a week (spaced repetition).</p>
-<details class="recall"><summary><span class="q-ico">Q</span> Describe the autoregressive generation loop in one sentence. <span class="chev">›</span></summary><div class="a">The model predicts a distribution for the next token, samples one, appends it to the input, and repeats the forward pass until a stop token or max-length is reached.</div></details>
+<details class="recall"><summary><span class="q-ico">Q</span> Describe the autoregressive generation loop in one sentence. <span class="chev">›</span></summary><div class="a">The model predicts a distribution, samples a token ID, appends that ID to the sequence, and performs the next cached decode step—reusing prior keys and values—until a stop token or length limit is reached.</div></details>
 <details class="recall"><summary><span class="q-ico">Q</span> What is the rough token-to-word ratio in English? <span class="chev">›</span></summary><div class="a">About 1 token ≈ 0.75 words (≈ 4 characters). Code and non-English text typically use more tokens per character.</div></details>
 <details class="recall"><summary><span class="q-ico">Q</span> What does the KV cache store and why? <span class="chev">›</span></summary><div class="a">The keys and values of already-processed tokens, so each new token attends to cached state instead of recomputing the whole sequence — trading GPU memory for speed.</div></details>
 <details class="recall"><summary><span class="q-ico">Q</span> Name the three training stages that turn raw text prediction into a helpful assistant. <span class="chev">›</span></summary><div class="a">Pre-training (next-token prediction) → Supervised fine-tuning (instruction pairs) → Preference alignment (RLHF/DPO).</div></details>

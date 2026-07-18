@@ -49,8 +49,7 @@
 
   /* ---------- Theme ---------- */
   function getTheme() {
-    return safeGet(LS_THEME) ||
-      (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    return safeGet(LS_THEME) || "light";
   }
   function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);

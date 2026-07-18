@@ -1,6 +1,6 @@
 /* =========================================================================
    GenAI Learning Hub — Glass Learning UI enhancements
-   - Focus and reader controls
+   - Wide, distraction-free reading layout
    - Reading progress, section guidance and scroll-to-top
    - Topic-aware animated SVG explainers on every lesson
    - Choreographed existing diagrams and calm reveal motion
@@ -736,10 +736,26 @@
     new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
 
+  function retireLegacyReadingControls() {
+    var body = document.body;
+    var root = document.documentElement;
+    ["focus-mode", "reader-text-small", "reader-text-large", "reader-text-xl",
+      "reader-narrow", "reader-wide", "reader-high-contrast"].forEach(function (name) {
+      body.classList.remove(name);
+      root.classList.remove(name);
+    });
+    delete root.dataset.readingSize;
+    delete root.dataset.readingWidth;
+    delete root.dataset.readingContrast;
+    try {
+      localStorage.removeItem(FOCUS_KEY);
+      localStorage.removeItem(READER_KEY);
+    } catch (error) {}
+  }
+
   function init() {
+    retireLegacyReadingControls();
     addHomeButton();
-    addFocusButton();
-    addReaderControls();
     injectTopicDiagram();
     setupReadingProgress();
     setupSectionGuidance();

@@ -66,162 +66,137 @@
 </header>
 <div class="content-wrap">
 <main class="content">
-<section class="zero-roadmap" id="zero-roadmap">
-<div class="zr-orb zr-orb-one" aria-hidden="true"></div>
-<div class="zr-orb zr-orb-two" aria-hidden="true"></div>
-<div class="zr-header">
-<div>
-<div class="eyebrow"><span class="dot"></span> Start here · no prior portal knowledge required</div>
-<h1>Zero to <span class="grad">interview ready</span>, in one sequence</h1>
-<p class="lead">Follow the stages below from top to bottom. Each topic is linked, every stage ends with a readiness gate, and the sidebar follows the same order throughout the portal.</p>
-</div>
-<div class="zr-actions">
-<a class="btn primary" href="study-plan.html">Open the full study plan →</a>
-<a class="btn ghost" href="#stage-0">Begin with prerequisites</a>
-</div>
-<div class="zr-meta">
-<span class="pill purple">7 sequential stages</span>
-<span class="pill">Beginner-first</span>
-<span class="pill blue">Learn → build → explain → practise</span>
+<div class="hero">
+<div class="eyebrow"><span class="dot"></span> The complete curriculum</div>
+<h1>Learn GenAI engineering in a <span class="grad">clear topic sequence</span></h1>
+<p class="lead">A first-principles, hands-on path through LLMs, Transformers, Embeddings, Vector DBs, RAG, Agents, MCP, LangGraph and Production GenAI. Basic programming logic is enough to begin; the portal stays focused on GenAI concepts, systems and interview preparation rather than teaching Python from scratch.</p>
+<div class="meta-row" style="justify-content:center">
+<span class="pill">15 modules</span>
+<span class="pill">6 applied ATS agents</span>
+<span class="pill">10 capstone projects</span>
+<span class="pill red">55-page interview hub</span>
+<span class="pill purple">Offline core · live interview sync</span>
+<span class="pill blue">Code · diagrams · quizzes</span>
 </div>
 </div>
-
-<div class="zr-stage-list">
-<article class="zr-stage" id="stage-0">
-<div class="zr-stage-marker"><span>00</span><small>Prerequisites</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>Technical prerequisites</h2><span class="zr-badge required">Required first</span></div>
-<p>Build enough Python, API, Git and SQL fluency to work through the GenAI material without fighting the tools.</p>
-<div class="zr-links">
-<a href="google-prep/index.html">Python foundations &amp; practice</a>
-<a href="interview-labs/python-sync-async-interview.html">Python sync vs async</a>
-<a href="interview-labs/fastapi-interview.html">FastAPI foundations</a>
-<a href="interview-labs/websockets-interview.html">WebSockets</a>
-<a href="interview-prep/09-sql-for-genai.html#sql-basics">Basic SQL readiness</a>
+<!-- ===== Start-here reading order (spans every section of the hub) ===== -->
+<div class="readmap">
+<div class="rm-head"><span class="ico">🧭</span><strong>Start here — recommended reading order</strong></div>
+<p class="rm-sub">New to this? Read in this order — each step builds on the one before. Every link opens the right page; use the sidebar to jump between sections anytime.</p>
+<ol><li><a class="rm-link" href="study-plan.html"><span class="rm-ttl">Global Study Plan <span class="tag">Start here</span></span><span class="rm-why">Choose the right route, understand the hours required for every section, and avoid duplicate study across overlapping material.</span></a></li>
+<li>
+<a class="rm-link" href="modules/01_foundations.html">
+<span class="rm-ttl">Foundations of LLMs <span class="tag">Module 01</span></span>
+<span class="rm-why">What an LLM actually is — next-token prediction, tokens, the context window. Everything else assumes this.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="memory.html">
+<span class="rm-ttl">Memory in LLMs <span class="tag">Deep Dive</span></span>
+<span class="rm-why">Why the model is stateless and how the context window works — the mental model behind chat history, RAG and agents.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="modules/04_embeddings.html">
+<span class="rm-ttl">Embeddings &amp; Vector Databases <span class="tag">Modules 04–05</span></span>
+<span class="rm-why">Turning text into vectors and searching them fast — the machinery under both RAG and long-term memory.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="modules/06_rag_basics.html">
+<span class="rm-ttl">RAG Basics <span class="tag">Module 06</span></span>
+<span class="rm-why">Ground an LLM in your own data: chunk → embed → retrieve → augment → generate.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="rag-deep-dive.html">
+<span class="rm-ttl">RAG, End-to-End <span class="tag">Deep Dive</span></span>
+<span class="rm-why">The full production pipeline — chunking strategies, hybrid retrieval, reranking, evaluation. The panoramic view.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="../teach-agents/index.html">
+<span class="rm-ttl">Understanding AI Agents <span class="tag">Course</span></span>
+<span class="rm-why">When an LLM stops just talking and starts <em>doing</em> — the agent loop, tools and orchestration.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="ats-agent-lab/index.html">
+<span class="rm-ttl">ATS Agent Build Lab <span class="tag">Applied course</span></span>
+<span class="rm-why">See six bounded production agents in a real recruitment app: architecture, Python, safety, optimization and evaluation.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="interview-prep/index.html">
+<span class="rm-ttl">GenAI Interview Question Bank <span class="tag">Career prep</span></span>
+<span class="rm-why">High-signal, topic-wise questions with concise answers, trade-offs and likely follow-ups for modern India GenAI roles.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="interview-hub/index.html">
+<span class="rm-ttl">Complete GenAI Interview Hub <span class="tag">55-page synchronized section</span></span>
+<span class="rm-why">The full interview-first site: core track, 173+ Q&amp;A, projects, worked system designs, mock interviews and revision plans — restyled inside this hub.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="scenario-practice/index.html">
+<span class="rm-ttl">Scenario Design Studio <span class="tag">System design</span></span>
+<span class="rm-why">Practise agents, RAG, latency, load, security, prompt injection, SQL safety and evaluation through realistic architecture cases.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="claude-agent.html">
+<span class="rm-ttl">How a Claude Agent Works <span class="tag">Deep Dive</span></span>
+<span class="rm-why">The agent loop made concrete on Claude — tools, the tool runner, the Agent SDK, context &amp; safety.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="../learn-rag-mcp/index.html">
+<span class="rm-ttl">RAG · MCP · Agents · LLMs <span class="tag">Guide</span></span>
+<span class="rm-why">A hands-on, build-it guide that ties LLMs, RAG, agents and MCP together with runnable projects.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="guardrails.html">
+<span class="rm-ttl">Guardrails <span class="tag">Deep Dive</span></span>
+<span class="rm-why">The rules an answer must pass before it ships — scope, safety, no leaking secrets or PII, no hallucination.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="langfuse.html">
+<span class="rm-ttl">Langfuse — Observability <span class="tag">Deep Dive</span></span>
+<span class="rm-why">Once it's running, how you debug and measure it: traces, cost, latency and quality scores.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="langgraph.html">
+<span class="rm-ttl">LangGraph &amp; its components <span class="tag">Deep Dive</span></span>
+<span class="rm-why">Build agents as stateful graphs — state, nodes, edges, the checkpointer and human-in-the-loop. The structure behind a real agent.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="hermes.html">
+<span class="rm-ttl">Hermes — open local models <span class="tag">Deep Dive · optional</span></span>
+<span class="rm-why">Run a capable, free, private agent brain on your own hardware — open function-calling models via Ollama.</span>
+</a>
+</li>
+<li>
+<a class="rm-link" href="modules/14_production_genai.html">
+<span class="rm-ttl">Advanced &amp; Production <span class="tag">Modules 07–15</span></span>
+<span class="rm-why">Advanced RAG, LangChain, LlamaIndex, multi-agent systems and shipping it for real.</span>
+</a>
+</li>
+</ol>
 </div>
-<div class="zr-gate"><strong>Readiness gate</strong><span>You can call an API, process JSON, write a small Python class, use Git, and query joined tables.</span></div>
-</div>
-</article>
-
-<article class="zr-stage" id="stage-1">
-<div class="zr-stage-marker"><span>01</span><small>Foundations</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>AI and LLM foundations</h2><span class="zr-badge required">Core</span></div>
-<p>Understand how neural networks and language models work before adding retrieval, tools or orchestration.</p>
-<div class="zr-links">
-<a href="interview-prep/00-neural-networks.html">Neural Networks</a>
-<a href="modules/01_foundations.html">Foundations of LLMs</a>
-<a href="modules/02_transformers.html">Transformers Deep Dive</a>
-<a href="memory.html">Memory &amp; context</a>
-<a href="interview-prep/01-llm-foundations-prompting.html">Prompting &amp; structured output</a>
-<a href="modules/03_local_llms.html">Local LLMs &amp; Ollama</a>
-</div>
-<div class="zr-gate"><strong>Readiness gate</strong><span>You can explain next-token generation, attention, context windows, temperature and hallucinations in plain language.</span></div>
-</div>
-</article>
-
-<article class="zr-stage" id="stage-2">
-<div class="zr-stage-marker"><span>02</span><small>Retrieval</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>Embeddings and RAG</h2><span class="zr-badge required">High priority</span></div>
-<p>Learn the retrieval pipeline, build it twice, then practise diagnosing why it fails.</p>
-<div class="zr-links">
-<a href="modules/04_embeddings.html">Embeddings</a>
-<a href="modules/05_vector_databases.html">Vector Databases</a>
-<a href="modules/06_rag_basics.html">RAG Basics</a>
-<a href="../learn-rag-mcp/05-build-simple-rag.html">Build a Simple RAG App</a>
-<a href="../learn-rag-mcp/06-build-pdf-qna.html">Build PDF Q&amp;A</a>
-<a href="modules/07_advanced_rag.html">Advanced RAG</a>
-<a href="rag-deep-dive.html">RAG End-to-End</a>
-<a href="interview-prep/02-embeddings-rag.html">RAG interview questions</a>
-<a href="interview-labs/rag-interview.html">Timed RAG lab</a>
-</div>
-<div class="zr-gate"><strong>Readiness gate</strong><span>You can build a small RAG system and isolate failures in ingestion, retrieval, context construction or generation.</span></div>
-</div>
-</article>
-
-<article class="zr-stage" id="stage-3">
-<div class="zr-stage-marker"><span>03</span><small>Agents</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>Agents, tools and MCP</h2><span class="zr-badge required">Core for agentic roles</span></div>
-<p>Start with the agent loop, then add tool contracts, state, persistence and framework-specific patterns.</p>
-<div class="zr-links">
-<a href="modules/08_agents.html">Agentic AI</a>
-<a href="../teach-agents/index.html">Understanding AI Agents</a>
-<a href="modules/09_mcp.html">Model Context Protocol</a>
-<a href="modules/10_langchain.html">LangChain</a>
-<a href="modules/12_langgraph.html">LangGraph</a>
-<a href="langgraph-asyncio.html">AsyncIO for LangGraph</a>
-<a href="langgraph-pydantic.html">Pydantic for LangGraph</a>
-<a href="modules/11_llamaindex.html">LlamaIndex</a>
-<a href="modules/13_multi_agents.html">Multi-Agent Systems</a>
-<a href="interview-prep/03-agents-mcp.html">Agents &amp; MCP questions</a>
-</div>
-<div class="zr-gate"><strong>Readiness gate</strong><span>You can choose between a workflow and an agent, design bounded tool execution, and explain retries, state and human approval.</span></div>
-</div>
-</article>
-
-<article class="zr-stage" id="stage-4">
-<div class="zr-stage-marker"><span>04</span><small>Production</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>Production engineering</h2><span class="zr-badge required">Interview differentiator</span></div>
-<p>Turn prototypes into observable, secure and cost-aware services backed by reliable data systems.</p>
-<div class="zr-links">
-<a href="modules/14_production_genai.html">Production GenAI</a>
-<a href="interview-prep/04-evaluation-llmops.html">Evaluation &amp; LLMOps</a>
-<a href="langfuse.html">Langfuse Observability</a>
-<a href="interview-prep/05-production-performance.html">Latency, scaling &amp; cost</a>
-<a href="guardrails.html">Guardrails</a>
-<a href="interview-prep/06-security-responsible-ai.html">Security &amp; Responsible AI</a>
-<a href="interview-prep/07-python-backend-cloud.html">Python, backend &amp; cloud</a>
-<a href="interview-prep/09-sql-for-genai.html">SQL for GenAI roles</a>
-</div>
-<div class="zr-gate"><strong>Readiness gate</strong><span>You can describe deployment, evaluation, tracing, authorization, failure recovery, latency and cost trade-offs.</span></div>
-</div>
-</article>
-
-<article class="zr-stage" id="stage-5">
-<div class="zr-stage-marker"><span>05</span><small>Project</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>Build one defensible project</h2><span class="zr-badge build">Build deeply</span></div>
-<p>One production-shaped project is more valuable than several shallow demos. Measure it, secure it and document every trade-off.</p>
-<div class="zr-links">
-<a href="modules/15_capstone_projects.html">Choose a Capstone</a>
-<a href="ats-agent-lab/index.html">ATS Agent Build Lab</a>
-<a href="ats-agent-lab/07-build-from-scratch.html">Build from Scratch</a>
-<a href="../learn-rag-mcp/index.html">Hands-on RAG/MCP guide</a>
-</div>
-<div class="zr-gate"><strong>Readiness gate</strong><span>You can defend the architecture, data flow, evaluation method, security controls, failures and next improvements without notes.</span></div>
-</div>
-</article>
-
-<article class="zr-stage" id="stage-6">
-<div class="zr-stage-marker"><span>06</span><small>Interviews</small></div>
-<div class="zr-stage-body">
-<div class="zr-stage-title"><h2>Convert knowledge into interview performance</h2><span class="zr-badge practise">Practise aloud</span></div>
-<p>Use closed-book answers, timed implementation and realistic system-design cases to expose and repair weak areas.</p>
-<div class="zr-links">
-<a href="interview-prep/index.html">GenAI Question Bank</a>
-<a href="interview-labs/index.html">Focused Coding Labs</a>
-<a href="scenario-practice/index.html">Scenario Design Studio</a>
-<a href="interview-prep/08-project-behavioral.html">Project &amp; Behavioural</a>
-<a href="interview-hub/index.html">Complete Interview Hub</a>
-</div>
-<div class="zr-gate"><strong>Practice loop</strong><span>Learn → implement → explain aloud → answer closed-book → solve a scenario → revise only the gaps.</span></div>
-</div>
-</article>
-</div>
-</section>
 
 <h2 id="sections">What's in the hub</h2>
-<p>The library remains available by course and format, while the roadmap and sidebar now keep the recommended learning sequence explicit.</p>
+<p>Each area stays distinct in the sidebar, while the linked reading order above gives you one clear topic-by-topic route.</p>
 <div class="grid grid-2"><a class="card hover" data-reveal="" href="study-plan.html"><span class="ico">⏱</span><h4>Global Study Plan</h4><p>Approximate hours for every section, the recommended AI Engineer route, and a sustainable weekday/weekend cadence.</p></a>
 <a class="card hover" data-reveal="" href="modules/01_foundations.html"><span class="ico">🎓</span><h4>GenAI Mastery</h4><p>The 15-module first-principles curriculum, from LLM foundations to production GenAI, across five tracks.</p></a>
 <a class="card hover" data-reveal="" href="../teach-agents/index.html"><span class="ico">🤖</span><h4>Understanding AI Agents</h4><p>A short, hands-on course on the agent loop, tools and orchestration — grounded in real EnM scenarios.</p></a>
 <a class="card hover" data-reveal="" href="../learn-rag-mcp/index.html"><span class="ico">🔌</span><h4>RAG · MCP · Agents · LLMs</h4><p>A build-it guide that ties the concepts together with runnable RAG, PDF-Q&amp;A and local-agent projects.</p></a>
 <a class="card hover" data-reveal="" href="rag-deep-dive.html"><span class="ico">📚</span><h4>Deep Dives</h4><p>Focused topic guides: RAG end-to-end, Langfuse, Guardrails, Memory, LangGraph, Claude Agent and Hermes.</p></a>
 <a class="card hover" data-reveal="" href="ats-agent-lab/index.html"><span class="ico">🧑‍💼</span><h4>ATS Agent Build Lab</h4><p>Reverse-engineer six recruitment agents, then rebuild their Python, validation, safety, optimization and evaluation patterns.</p></a>
-<a class="card hover" data-reveal="" href="google-prep/index.html"><span class="ico">🏁</span><h4>Google Preparation</h4><p>Your focused Python/backend and ML/data-systems SDE command center: staged roadmap, practice prompts, readiness gates.</p></a>
 <a class="card hover" data-reveal="" href="interview-prep/index.html"><span class="ico">🎤</span><h4>GenAI Interview Question Bank</h4><p>Focused current-role preparation: foundations, RAG, agents, MCP, LLMOps, security, Python and project discussions.</p></a>
 <a class="card hover" data-reveal="" href="interview-hub/index.html"><span class="ico">🧭</span><h4>Complete GenAI Interview Hub</h4><p>All 55 source pages in one native section: 173+ Q&amp;A, core topics, projects, system designs, mocks, revision plans and generated answer diagrams.</p></a>
 <a class="card hover" data-reveal="" href="scenario-practice/index.html"><span class="ico">🏗️</span><h4>Scenario Design Studio</h4><p>Eight guided system-design cases with architecture, trade-offs, scaling, security, evaluation and Python sketches.</p></a>
@@ -239,13 +214,13 @@
 <div class="callout key">
 <div class="c-ico">🎓</div>
 <div class="c-body">
-<div class="c-title">Designed for a true beginner—and useful as a structured reset</div>
-<p>You can enter with no AI or GenAI background. Begin at Stage 00 if Python, APIs, Git or SQL are unfamiliar; otherwise use the readiness gates to skip only what you can already demonstrate. The route then builds one dependency at a time through foundations, RAG, agents, production engineering, a serious project and interview practice.</p>
+<div class="c-title">Designed for a GenAI learner moving toward interview readiness</div>
+<p>You only need basic programming logic to start. The curriculum focuses on LLM mental models, retrieval, agents, orchestration, evaluation, security and production architecture—without adding a separate Python-basics syllabus to the portal.</p>
 </div>
 </div>
 <div class="page-nav">
 <span></span>
-<a class="next" href="study-plan.html"><div class="dir">Continue the sequence →</div><div class="ttl">Global Study Plan</div></a>
+<a class="next" href="modules/01_foundations.html"><div class="dir">Start here →</div><div class="ttl">01 · Foundations of LLMs</div></a>
 </div>
 </main>
 <div class="toc-rail"><nav class="toc"></nav></div>
