@@ -115,23 +115,81 @@
     });
   }
 
-  /* ---------- TOC (auto from h2) ---------- */
+  /* ---------- Textbook-style chapter contents (auto from h2) ---------- */
+  function compactTOCLabel(text) {
+    return text
+      .replace(/^\s*\d+\s*[.·)]\s*/, "")
+      .replace(/first-principles breakdown/i, "First principles")
+      .replace(/deep technical explanation/i, "Technical detail")
+      .replace(/interactive:\s*/i, "")
+      .replace(/watch generation happen/i, "Watch generation")
+      .replace(/practical python/i, "Python practice")
+      .replace(/ollama implementation/i, "Ollama setup")
+      .replace(/industry perspective/i, "Industry view")
+      .replace(/top mistakes engineers make/i, "Common mistakes")
+      .replace(/interview preparation/i, "Interview prep")
+      .replace(/mini project\s*[—–-].*$/i, "Mini project")
+      .replace(/real project connection/i, "Project context")
+      .replace(/executive summary/i, "Summary")
+      .trim();
+  }
+
+  function escapeTOCText(text) {
+    return text.replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  }
+
   function buildTOC() {
     const rail = document.querySelector(".toc");
     const content = document.querySelector(".content");
     if (!rail || !content) return;
     const heads = [...content.querySelectorAll("h2[id]")];
     if (!heads.length) { const r = document.querySelector(".toc-rail"); if (r) r.style.display = "none"; return; }
-    rail.innerHTML = `<div class="toc-title">On this page</div>` +
-      heads.map(h => `<a href="#${h.id}" data-toc="${h.id}">${h.textContent.replace(/^\d+\.\s*/, "")}</a>`).join("");
+
+    rail.classList.add("toc-textbook");
+    rail.innerHTML = `
+      <div class="toc-book-head">
+        <div><span class="toc-kicker">Chapter contents</span><strong>${heads.length} topics</strong></div>
+        <button class="toc-top" type="button" aria-label="Back to chapter top" title="Back to top">↑</button>
+      </div>
+      <label class="toc-filter">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+        <input type="search" placeholder="Find topic" aria-label="Find a topic in this chapter">
+      </label>
+      <div class="toc-list">${heads.map((h, index) => {
+        const full = h.textContent.trim();
+        const match = full.match(/^\s*(\d+)\s*[.·)]\s*/);
+        const num = String(match ? match[1] : index + 1).padStart(2, "0");
+        const label = compactTOCLabel(full);
+        return `<a href="#${h.id}" data-toc="${h.id}" title="${escapeTOCText(full)}"><span class="toc-num">${num}</span><span class="toc-label">${escapeTOCText(label)}</span></a>`;
+      }).join("")}<div class="toc-empty" hidden>No matching topic</div></div>`;
+
     const links = [...rail.querySelectorAll("[data-toc]")];
+    const list = rail.querySelector(".toc-list");
+    const filter = rail.querySelector(".toc-filter input");
+    const empty = rail.querySelector(".toc-empty");
+    const top = rail.querySelector(".toc-top");
+
+    if (top) top.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    if (filter) filter.addEventListener("input", () => {
+      const query = filter.value.trim().toLowerCase();
+      let shown = 0;
+      links.forEach(link => {
+        const visible = !query || link.textContent.toLowerCase().includes(query) || (link.title || "").toLowerCase().includes(query);
+        link.hidden = !visible;
+        if (visible) shown += 1;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
+
     const obs = new IntersectionObserver(entries => {
       entries.forEach(en => {
         if (en.isIntersecting) {
           links.forEach(l => l.classList.toggle("active", l.dataset.toc === en.target.id));
+          const active = links.find(l => l.dataset.toc === en.target.id);
+          if (active && list) active.scrollIntoView({ block: "nearest" });
         }
       });
-    }, { rootMargin: "-80px 0px -70% 0px" });
+    }, { rootMargin: "-72px 0px -72% 0px" });
     heads.forEach(h => obs.observe(h));
   }
 

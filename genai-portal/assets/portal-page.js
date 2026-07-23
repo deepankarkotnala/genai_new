@@ -104,33 +104,84 @@
     });
   }
 
-  /* ---------- Right-rail TOC from h2[id] ---------- */
+  /* ---------- Textbook-style chapter contents from h2[id] ---------- */
   function slug(t) {
     return t.toLowerCase().replace(/[^\w]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50) || "section";
+  }
+  function compactTOCLabel(text) {
+    return text
+      .replace(/^\s*\d+\s*[.·)]\s*/, "")
+      .replace(/first-principles breakdown/i, "First principles")
+      .replace(/deep technical explanation/i, "Technical detail")
+      .replace(/interactive:\s*/i, "")
+      .replace(/watch generation happen/i, "Watch generation")
+      .replace(/practical python/i, "Python practice")
+      .replace(/ollama implementation/i, "Ollama setup")
+      .replace(/industry perspective/i, "Industry view")
+      .replace(/top mistakes engineers make/i, "Common mistakes")
+      .replace(/interview preparation/i, "Interview prep")
+      .replace(/mini project\s*[—–-].*$/i, "Mini project")
+      .replace(/real project connection/i, "Project context")
+      .replace(/executive summary/i, "Summary")
+      .trim();
+  }
+  function escapeTOCText(text) {
+    return text.replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
   }
   function buildTOC() {
     var rail = document.querySelector(".toc");
     var content = document.querySelector(".content");
     if (!rail || !content) return;
     var heads = [].slice.call(content.querySelectorAll("h2"));
-    // ensure ids
     var used = {};
     heads.forEach(function (h) {
       if (!h.id) { var s = slug(h.textContent), b = s, i = 2; while (used[s] || document.getElementById(s)) s = b + "-" + (i++); used[s] = 1; h.id = s; }
     });
     if (!heads.length) { var r = document.querySelector(".toc-rail"); if (r) r.style.display = "none"; return; }
-    rail.innerHTML = '<div class="toc-title">On this page</div>' +
-      heads.map(function (h) {
-        return '<a href="#' + h.id + '" data-toc="' + h.id + '">' +
-          h.textContent.replace(/^\s*\d+[\.·)]\s*/, "") + "</a>";
-      }).join("");
+
+    rail.classList.add("toc-textbook");
+    var rows = heads.map(function (h, index) {
+      var full = h.textContent.trim();
+      var match = full.match(/^\s*(\d+)\s*[.·)]\s*/);
+      var num = String(match ? match[1] : index + 1).padStart(2, "0");
+      return '<a href="#' + h.id + '" data-toc="' + h.id + '" title="' + escapeTOCText(full) + '">' +
+        '<span class="toc-num">' + num + '</span><span class="toc-label">' + escapeTOCText(compactTOCLabel(full)) + '</span></a>';
+    }).join("");
+    rail.innerHTML =
+      '<div class="toc-book-head"><div><span class="toc-kicker">Chapter contents</span><strong>' + heads.length + ' topics</strong></div>' +
+      '<button class="toc-top" type="button" aria-label="Back to chapter top" title="Back to top">↑</button></div>' +
+      '<label class="toc-filter"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>' +
+      '<input type="search" placeholder="Find topic" aria-label="Find a topic in this chapter"></label>' +
+      '<div class="toc-list">' + rows + '<div class="toc-empty" hidden>No matching topic</div></div>';
+
     var links = [].slice.call(rail.querySelectorAll("[data-toc]"));
+    var list = rail.querySelector(".toc-list");
+    var filter = rail.querySelector(".toc-filter input");
+    var empty = rail.querySelector(".toc-empty");
+    var top = rail.querySelector(".toc-top");
+    if (top) top.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+    if (filter) filter.addEventListener("input", function () {
+      var query = filter.value.trim().toLowerCase();
+      var shown = 0;
+      links.forEach(function (link) {
+        var visible = !query || link.textContent.toLowerCase().indexOf(query) > -1 || (link.title || "").toLowerCase().indexOf(query) > -1;
+        link.hidden = !visible;
+        if (visible) shown += 1;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
     if (window.IntersectionObserver) {
       var obs = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
-          if (en.isIntersecting) links.forEach(function (l) { l.classList.toggle("active", l.getAttribute("data-toc") === en.target.id); });
+          if (en.isIntersecting) {
+            links.forEach(function (l) { l.classList.toggle("active", l.getAttribute("data-toc") === en.target.id); });
+            var active = links.find(function (l) { return l.getAttribute("data-toc") === en.target.id; });
+            if (active && list) active.scrollIntoView({ block: "nearest" });
+          }
         });
-      }, { rootMargin: "-80px 0px -70% 0px" });
+      }, { rootMargin: "-72px 0px -72% 0px" });
       heads.forEach(function (h) { obs.observe(h); });
     }
   }

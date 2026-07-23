@@ -323,6 +323,8 @@
     var input = document.querySelector("[data-search]") || document.querySelector("[data-secsearch]");
     var out = document.querySelector(".search-results") || document.querySelector("[data-secresults]");
     if (!input || !out) return;
+    input.placeholder = "Find chapter or topic…  ( / )";
+    input.setAttribute("aria-label", "Find a chapter or topic");
     // flatten registry for searching, remembering each page's group label
     var index = [];
     GROUPS.forEach(function (g) {
@@ -465,8 +467,8 @@
     app.appendChild(handle);
 
     function desktopMinimum() {
-      // Mirrors --sidebar-w: clamp(244px, 18vw, 292px).
-      return Math.round(Math.max(244, Math.min(292, window.innerWidth * 0.18)));
+      // Mirrors the compact desktop --sidebar-w token in styles.css.
+      return Math.round(Math.max(220, Math.min(252, window.innerWidth * 0.15)));
     }
 
     function mobileMinimum() {
